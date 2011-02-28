@@ -7,8 +7,8 @@ function clamp(value, min, max) {
 
 // Class for holding the data
 function GraphData() {
-    this.data = [100,2,5,27,75,74,84,80,75,70,71,30,32,31,32,25,20,15,5,10,30];
-
+    this.data = [100,2,5,27,75,74,84,80,75,70,71,30,32,31,32,25,20,15,5,10,30,25,20,23,22,18,20,27,30,35,40,42,45,60,62,63,70,75,73,71,68,61,62,65,70,73,71,69,76,80,83,87,91,95,89,80,75,71,65];
+    this.position = 5;
 }
 
 GraphData.prototype.getData = function (start, width) {
@@ -26,7 +26,6 @@ function Graph(id) {
     this.scale = 100;
     this.width = this.element.width;
     this.height = this.element.height;
-    this.view_position = 0;
     this.view_width = 10;
     this.grid_spacing = this.height / 5;
     this.data = new GraphData();
@@ -67,7 +66,7 @@ Graph.prototype.drawData = function () {
     this.c.beginPath();
     x = 0;
     step = this.width / (this.view_width - 1);
-    data = this.data.getData(this.view_position, this.view_width);
+    data = this.data.getData(this.data.position, this.view_width);
     for (y=0; y < this.view_width; y++) {
         this.c.lineTo(x, this.scaleDataPoint(data[y]));
         x += step;
@@ -86,8 +85,8 @@ Graph.prototype.handleScroll = function (delta, vertical) {
         position_delta = delta;
     }
     
-    this.view_width = clamp(this.view_width - width_delta, 5, 20);
-    this.view_position = clamp(this.view_position - position_delta, 0, this.data.length() - this.view_width);
+    this.view_width = clamp(this.view_width - width_delta, 10, 30);
+    this.data.position = clamp(this.data.position - position_delta, 0, this.data.length() - this.view_width);
     this.draw();
 }
 
